@@ -31,7 +31,7 @@ namespace IFTools
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<InfiniteFlightApi>();
 
             services.AddScoped<CurrentPage>();
         }
@@ -67,6 +67,8 @@ namespace IFTools
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+            
+            InfiniteFlightApi.Init();
         }
     }
 }

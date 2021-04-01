@@ -1,11 +1,12 @@
 ﻿@page "/"
 @inject CurrentPage CurrentPage
 
-<h1>@CurrentPage.CurrentPageName</h1>
+<h1 class="mobile-page-title">@CurrentPage.CurrentPageName</h1>
 
-Welcome to your new app.
-
-<InfoDialog Title="test title" Information="test info" />
+<p class="welcome-text">
+    Welcome to IF-Tools! <br/>
+    Refer to the navigation menu for Infinite Flight Live tools.
+</p>
 
 @code {
     

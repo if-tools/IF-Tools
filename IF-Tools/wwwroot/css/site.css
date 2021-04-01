@@ -16,6 +16,11 @@ a, .btn-link {
     padding-top: 20px;
 }
 
+/* Hide reconnection messages */
+.components-reconnect-show, .components-reconnect-failed, .components-reconnect-rejected {
+    display: none;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
