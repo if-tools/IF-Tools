@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Web.Extensions.Head
+@inject CurrentPage CurrentPage
+
+<Title value="@(CurrentPage.CurrentPageName == "" ? "IF-Tools" : CurrentPage.CurrentPageName + " - IF-Tools")"></Title>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4">
+            <span class="page-title">@CurrentPage.CurrentPageName</span>
+            <a href="/about">About</a>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        CurrentPage.OnChange += StateHasChanged;
+
+        base.OnInitialized();
+    }
+
+}

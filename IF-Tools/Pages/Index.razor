@@ -1,0 +1,18 @@
+﻿@page "/"
+@inject CurrentPage CurrentPage
+
+<h1>@CurrentPage.CurrentPageName</h1>
+
+Welcome to your new app.
+
+<InfoDialog Title="test title" Information="test info" />
+
+@code {
+    
+    protected override void OnInitialized()
+    {
+        CurrentPage.SetCurrentPageName("Main");
+        base.OnInitialized();
+    }
+
+}

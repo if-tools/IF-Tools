@@ -1,0 +1,43 @@
+@page "/about"
+
+@using Newtonsoft.Json
+@using System.IO
+
+@inject CurrentPage CurrentPage
+
+<div class="wrapper">
+    <img class="about-logo about-element" alt="logo" src="Assets/Images/Logos/logo-small-wshadow.png">
+    <span class="about-title about-element">IF-Tools</span>
+    <span class="about-version about-element">@Version</span>
+    <span class="about-description about-element">A website with tools for Infinite Flight Live.</span>
+    <span class="about-copyright about-element">Copyright &copy; 2021 Gleb Zhynko</span>
+    <span class="about-licensed about-element">Licensed under <a href="https://github.com/gzhynko/IF-Tools/blob/master/LICENSE" target="_blank">MIT</a></span>
+</div>
+
+@code {
+
+    public string Version;
+    
+    protected override void OnInitialized()
+    {
+        CurrentPage.SetCurrentPageName("");
+        Version = GetVersion();
+        
+        base.OnInitialized();
+    }
+
+    private string GetVersion()
+    {
+        var versionFile = File.ReadAllText("appVersion.json");
+        var deserializedVersionFile = JsonConvert.DeserializeObject<VersionFile>(versionFile);
+
+        return deserializedVersionFile == null ? "N/A" : deserializedVersionFile.Version;
+    }
+
+    class VersionFile
+    {
+        [JsonProperty("version")]
+        public string Version { get; set; }
+    }
+
+}

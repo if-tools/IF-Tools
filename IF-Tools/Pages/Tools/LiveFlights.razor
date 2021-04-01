@@ -1,0 +1,19 @@
+@page "/tools/live-flights"
+
+@inject CurrentPage CurrentPage
+
+<h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
+
+<p>Current count: 0</p>
+
+<button class="btn btn-primary">Click me</button>
+
+@code {
+    
+    protected override void OnInitialized()
+    {
+        CurrentPage.SetCurrentPageName("Live Flights");
+        base.OnInitialized();
+    }
+
+}

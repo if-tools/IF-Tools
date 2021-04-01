@@ -1,0 +1,12 @@
+@page "/tools/"
+
+@inject NavigationManager NavManager
+
+<p>Redirecting to Main</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavManager.NavigateTo("/");
+    }
+}

@@ -1,0 +1,10 @@
+.mobile-page-title {
+    display: none;
+    text-align: center;
+}
+
+@media (max-width: 640.98px) {
+    .mobile-page-title {
+        display: block;
+    }
+}
