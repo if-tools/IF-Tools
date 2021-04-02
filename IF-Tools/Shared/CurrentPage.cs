@@ -1,10 +1,17 @@
 using System;
+using System.Threading.Tasks;
 
 namespace IFTools.Shared
 {
     public class CurrentPage
     {
         public string CurrentPageName { get; private set; }
+        
+        public string NotificationBoxText = "";
+
+        public bool NotificationBoxShown;
+        
+        public event Action OnChange;
 
         public void SetCurrentPageName(string name)
         {
@@ -14,9 +21,25 @@ namespace IFTools.Shared
                 NotifyStateChanged();
             }
         }
-
-        public event Action OnChange;
-
+        
+        public async void ShowNotification(string text)
+        {
+            if (NotificationBoxShown)
+            {
+                NotificationBoxText = text;
+                return;
+            }
+            
+            NotificationBoxText = text;
+            NotificationBoxShown = true;
+            NotifyStateChanged();
+            
+            await Task.Delay(4000);
+            
+            NotificationBoxShown = false;
+            NotifyStateChanged();
+        }
+        
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
 

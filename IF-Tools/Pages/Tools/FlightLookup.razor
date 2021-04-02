@@ -1,19 +1,149 @@
 @page "/tools/flight-lookup"
+@using IFTools.Data
+@using IFTools.Data.Types
 
 @inject CurrentPage CurrentPage
 
+<FlightInfoModal @ref="_flightInfoModal"></FlightInfoModal>
+
 <h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
 
-<p>Current count: 0</p>
-
-<button class="btn btn-primary">Click me</button>
+<div class="wrapper">
+    <div class="section-left">
+        <div class="data-input">
+            <div class="server-box">
+                <span class="input-name">Server</span>
+                <select class="form-select server-select" @bind="_selectedServer">
+                    <option value="all">All Servers</option>
+                    <option value="casual">Casual Server</option>
+                    <option value="training">Training Server</option>
+                    <option value="expert">Expert Server</option>
+                </select>
+            </div>
+            <div class="method-box">
+                <span class="input-name">Search method</span>
+                <select class="form-select server-select" @bind="_searchMethod">
+                    <option value="callsign">By Callsign</option>
+                    <option value="flightid">By Flight ID</option>
+                </select>
+            </div>
+            <div class="query-box">
+                <span class="input-name">Search query</span>
+                <input class="query-input" @bind="_searchQuery" placeholder="Enter your search query">
+            </div>
+            <button class="btn btn-primary" @onclick="SearchFlight">Search</button>
+        </div>
+    </div>
+    <div class="section-right">
+        <h4 class="section-title">Result <LoadingIndicator IsShown="_showLoadingIndicator" AddLeftMargin="true"></LoadingIndicator></h4>
+        <div class="result">
+            @if(_resultDisplayed)
+            {
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Callsign</th>
+                        <th>Aircraft</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var entry in _searchResults)
+                    {
+                        <tr class="clickable" @onclick="() => _flightInfoModal.Show(entry)">
+                            <td>@entry.Callsign</td>
+                            <td>@(AircraftGuidsService.GetAircraftName(entry.AircraftId))</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="nothing-displayed">There's nothing to show here.</p>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     
+    string _selectedServer = "all";
+    string _searchMethod = "callsign";
+    string _searchQuery = "";
+    
+    bool _resultDisplayed;
+    bool _showLoadingIndicator;
+    List<FlightEntry> _searchResults;
+
+    FlightInfoModal _flightInfoModal;
+
     protected override void OnInitialized()
     {
         CurrentPage.SetCurrentPageName("Flight Lookup");
+
         base.OnInitialized();
+    }
+    
+    void SearchFlight()
+    {
+        
+        if (_searchQuery.Trim() == "")
+        {
+            CurrentPage.ShowNotification("Query is empty.");
+            return;
+        }
+        
+        var serverGuid = ServerGuids.GetGuidByName(_selectedServer);
+        
+        GetAndDisplaySearchResultsForServer(serverGuid);
+    }
+
+    async void GetAndDisplaySearchResultsForServer(Guid server)
+    {
+        _showLoadingIndicator = true;
+        StateHasChanged();
+
+        List<FlightEntry> flights = new List<FlightEntry>();
+        
+        if (_selectedServer == "all")
+        {
+            flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.CasualServerId));
+            flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.TrainingServerId));
+            flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.ExpertServerId));
+        }
+        else
+        {
+            flights.AddRange(await ApiHelper.GetFlightsForServer(server));
+        }
+
+        _searchResults = new List<FlightEntry>();
+        _searchResults = flights.FindAll(flight =>
+        {
+            switch (_searchMethod)
+            {
+                case "callsign":
+                    return flight.Callsign != null && flight.Callsign.ToLower().Contains(_searchQuery.ToLower());
+                case "flightid":
+                    return flight.FlightId.ToString().Equals(_searchQuery);
+            }
+
+            return false;
+        });
+
+        if (_searchResults.Count <= 0)
+        {
+            CurrentPage.ShowNotification("No such flight found.");
+            _showLoadingIndicator = false;
+            _resultDisplayed = false;
+            StateHasChanged();
+
+            return;
+        }
+        
+        _resultDisplayed = true;
+        _showLoadingIndicator = false;
+            
+        StateHasChanged();
     }
 
 }

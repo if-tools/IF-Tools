@@ -9,26 +9,34 @@ namespace IFTools.Data.Types
     {
         [JsonProperty("frequencyId")]
         public Guid FrequencyId { get; set; }
+        
         [JsonProperty("userId")]
         public Guid UserId { get; set; }
+        
         [JsonProperty("username")]
         public string Username { get; set; }
+        
         [JsonProperty("virtualOrganization")]
         public string VirtualOrganization { get; set; }
+        
         [JsonProperty("airportName")]
         public string AirportName { get; set; }
+        
         [JsonProperty("type")]
         public FrequencyType Type { get; set; }
+        
         [JsonProperty("latitude")]
         public double Latitude { get; set; }
+        
         [JsonProperty("longitude")]
         public double Longitude { get; set; }
+        
         public DateTimeOffset StartTime { get; set; }
 
-        public async Task<UserStats> GetUser(InfiniteFlightApi apiService)
+        public async Task<UserStats> GetUser()
         {
             Guid[] ids = { UserId };
-            return (await apiService.GetUserStatsAsync(ids)).FirstOrDefault();
+            return (await InfiniteFlightApiService.GetUserStatsAsync(ids)).FirstOrDefault();
         }
     }
 

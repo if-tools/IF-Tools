@@ -31,7 +31,8 @@ namespace IFTools
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<InfiniteFlightApi>();
+            services.AddSingleton<InfiniteFlightApiService>();
+            services.AddSingleton<AircraftGuidsService>();
 
             services.AddScoped<CurrentPage>();
         }
@@ -68,7 +69,8 @@ namespace IFTools
                 endpoints.MapFallbackToPage("/_Host");
             });
             
-            InfiniteFlightApi.Init();
+            InfiniteFlightApiService.Init();
+            AircraftGuidsService.Init();
         }
     }
 }

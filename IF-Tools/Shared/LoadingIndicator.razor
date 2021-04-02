@@ -1,0 +1,13 @@
+<div class="loader@(!IsShown ? " hidden" : "") @(AddLeftMargin ? "left-margin" : "")" style="width: @DimensionsEm; height: @DimensionsEm"></div>
+
+@code {
+    [Parameter] 
+    public bool IsShown { get; set; }
+
+    [Parameter]
+    public bool AddLeftMargin { get; set; }
+    
+    [Parameter]
+    public int DimensionsEm { get; set; } = 8;
+
+}

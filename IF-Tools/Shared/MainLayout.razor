@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
-@using Microsoft.AspNetCore.Components.Web.Extensions.Head
+@using Microsoft.AspNetCore.Components.Web.Extensions.Head;
 @inject CurrentPage CurrentPage
 
 <Title value="@(CurrentPage.CurrentPageName == "" ? "IF-Tools" : CurrentPage.CurrentPageName + " - IF-Tools")"></Title>
 
 <div class="page">
+    <div class="notification-box @(CurrentPage.NotificationBoxShown ? "out" : "")">
+        <span class="feather icon-info" aria-hidden="true"></span>
+        @CurrentPage.NotificationBoxText
+    </div>
+    
     <div class="sidebar">
         <NavMenu/>
     </div>
@@ -22,7 +27,7 @@
 </div>
 
 @code {
-
+    
     protected override void OnInitialized()
     {
         CurrentPage.OnChange += StateHasChanged;

@@ -2,6 +2,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 .page-title {
@@ -13,6 +14,30 @@
     font-family: Roboto, sans-serif;
     font-size: 25px;
     line-height: normal;
+}
+
+.notification-box {
+    position: absolute;
+    top: 70px;
+    right: -315px;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 50px;
+    background-color: lightyellow;
+    border: 1px solid lightgray;
+    border-radius: 10px 0 0 10px;
+    transition: .1s right;
+    font-size: 18px;
+}
+
+.notification-box .feather {
+    font-size: 30px;
+    margin: 0 10px;
+}
+
+.notification-box.out {
+    right: 15px;
 }
 
 .main {
@@ -80,7 +105,7 @@
     }
 
     .main > div {
-        padding-left: 2rem !important;
+        padding-left: 1.5rem !important;
         padding-right: 1.5rem !important;
     }
 }

@@ -7,8 +7,10 @@ namespace IFTools.Data.Types
     {
         [JsonProperty("userIds")]
         public Guid[] UserIds { get; set; }
+        
         [JsonProperty("userHashes")]
         public string[] Hashes { get; set; }
+        
         [JsonProperty("discourseNames")]
         public string[] IfcNames { get; set; }
     }

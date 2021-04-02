@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="26.1.0" />
       <PackageReference Include="dotless.Core" Version="1.6.7" />
       <PackageReference Include="Microsoft.AspNetCore.Components.Web.Extensions" Version="5.0.0-preview9.20513.1" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

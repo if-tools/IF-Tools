@@ -6,6 +6,7 @@ namespace IFTools.Data.Types
     {
         [JsonProperty("errorCode")]
         public ResponseCode ErrorCode { get; set; }
+        
         [JsonProperty("result")]
         public T Result { get; set; }
     }

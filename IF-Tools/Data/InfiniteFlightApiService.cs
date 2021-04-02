@@ -9,7 +9,7 @@ using Group = IFTools.Data.Types.Group;
 
 namespace IFTools.Data
 {
-    public class InfiniteFlightApi
+    public class InfiniteFlightApiService
     {
         private static HttpClient _http;
         private static string _apiKey;
@@ -20,25 +20,38 @@ namespace IFTools.Data
         {
             _apiKey = Environment.GetEnvironmentVariable("IF_LIVE_KEY");
             _http = new HttpClient();
+
+            Task.Run(AssignServerGuids);
         }
         
-        public readonly List<Group> Groups = new()
+        public static readonly List<Group> Groups = new()
         {
             new Group("DF0F6341-5F6A-40EF-8B73-087A0EC255B5", "IFATC"),
             new Group("8C93A113-0C6C-491F-926D-1361E43A5833", "Moderators"),
             new Group("D07AFAD8-79DF-4363-B1C7-A5A1DDE6E3C8", "Staff")
         };
 
-        public async Task<string> GetRawEndpoint(string endpoint, string parameters)
+        private static async Task AssignServerGuids()
+        {
+            var serverInfo = await GetSessionsAsync();
+            
+            if (serverInfo == null) throw new Exception("Cannot Retrieve Session Info.");
+            
+            ServerGuids.CasualServerId = serverInfo.CasualServer.Id;
+            ServerGuids.TrainingServerId = serverInfo.TrainingServer.Id;
+            ServerGuids.ExpertServerId = serverInfo.ExpertServer.Id;
+        }
+
+        private static async Task<string> GetRawEndpoint(string endpoint, string parameters)
         {
             return await _http.GetStringAsync(
                 ApiHelper.BuildUrl(BaseUrl, endpoint, parameters));
         }
 
-        public async Task<List<SessionInfo>> GetSessionsAsync()
+        public static async Task<SessionInfoList> GetSessionsAsync()
         {
             var json = await GetRawEndpoint("sessions", $"apikey={_apiKey}");
-            var data = JsonConvert.DeserializeObject<ApiResponse<List<SessionInfo>>>(json);
+            var data = JsonConvert.DeserializeObject<ApiResponse<SessionInfoList>>(json);
             
             if(data == null) throw new Exception($"Invalid API Response. Data is null.");
             if(data.ErrorCode != ResponseCode.Ok)
@@ -49,7 +62,7 @@ namespace IFTools.Data
             return data.Result;
         }
 
-        public async Task<List<FlightEntry>> GetFlightsAsync(Guid sessionId)
+        public static async Task<List<FlightEntry>> GetFlightsAsync(Guid sessionId)
         {
             var json = await GetRawEndpoint($"/flights/{sessionId}", $"apikey={_apiKey}");
             var data = JsonConvert.DeserializeObject<ApiResponse<List<FlightEntry>>>(json);
@@ -63,7 +76,7 @@ namespace IFTools.Data
             return data.Result;
         }
 
-        public async Task<List<AtcEntry>> GetAtcFacilitiesAsync(Guid sessionId)
+        public static async Task<List<AtcEntry>> GetAtcFacilitiesAsync(Guid sessionId)
         {
             var json = await GetRawEndpoint($"/atc/{sessionId}", $"apikey={_apiKey}");
             var data = JsonConvert.DeserializeObject<ApiResponse<List<AtcEntry>>>(json);
@@ -77,7 +90,7 @@ namespace IFTools.Data
             return data.Result;
         }
 
-        public async Task<List<FlightPlanEntry>> GetFlightPlansAsync(Guid sessionId)
+        public static async Task<List<FlightPlanEntry>> GetFlightPlansAsync(Guid sessionId)
         {
             var json = await GetRawEndpoint($"/flightplans/{sessionId}", $"apikey={_apiKey}");
             var data = JsonConvert.DeserializeObject<ApiResponse<List<FlightPlanEntry>>>(json);
@@ -91,7 +104,7 @@ namespace IFTools.Data
             return data.Result;
         }
         
-        public async Task<UserGradeInfo> GetUserGradeAsync(Guid userId)
+        public static async Task<UserGradeInfo> GetUserGradeAsync(Guid userId)
         {
             var json = await GetRawEndpoint($"/user/grade/{userId}", $"apikey={_apiKey}");
             var data = JsonConvert.DeserializeObject<ApiResponse<UserGradeInfo>>(json);
@@ -105,7 +118,7 @@ namespace IFTools.Data
             return data.Result;
         }
 
-        public async Task<List<UserStats>> GetUserStatsAsync(Guid[] userIds = null, string[] hashes = null, string[] ifcNames = null)
+        public static async Task<List<UserStats>> GetUserStatsAsync(Guid[] userIds = null, string[] hashes = null, string[] ifcNames = null)
         {
             if (userIds == null && hashes == null && ifcNames == null)
             {

@@ -22,10 +22,10 @@ namespace IFTools.Data.Types
         [JsonProperty("flightId")]
         public string FlightId { get; set; }
 
-        public async Task<UserStats> GetCreator(InfiniteFlightApi apiService)
+        public async Task<UserStats> GetCreator()
         {
             Guid[] ids = { CreatorId };
-            var res = await apiService.GetUserStatsAsync(ids);
+            var res = await InfiniteFlightApiService.GetUserStatsAsync(ids);
             
             return res.FirstOrDefault();
         }
