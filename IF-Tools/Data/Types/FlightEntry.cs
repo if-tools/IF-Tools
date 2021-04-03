@@ -52,6 +52,9 @@ namespace IFTools.Data.Types
         [JsonProperty("lastReport")]
         public DateTimeOffset LastReport { get; set; }
         
+        [JsonIgnore]
+        public Guid ServerId { get; set; }
+        
         public async Task<FlightPlanEntry> GetFlightPlan(Guid sessionId)
         {
             var flightPlans = await InfiniteFlightApiService.GetFlightPlansAsync(sessionId);

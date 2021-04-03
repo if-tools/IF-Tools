@@ -81,9 +81,22 @@
     {
         _showLoadingIndicator = true;
         StateHasChanged();
+
+        List<FlightEntry> flights;
         
-        var flights = await ApiHelper.GetFlightsForServer(server);
-        
+        try
+        {
+            flights = await ApiHelper.GetFlightsForServer(server);
+        }
+        catch
+        {
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            _showLoadingIndicator = false;
+            StateHasChanged();
+            
+            return;
+        }
+
         _flightEntries = flights;
         _resultDisplayed = true;
         _showLoadingIndicator = false;

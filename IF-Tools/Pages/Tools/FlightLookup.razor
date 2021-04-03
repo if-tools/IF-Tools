@@ -22,9 +22,11 @@
             </div>
             <div class="method-box">
                 <span class="input-name">Search method</span>
-                <select class="form-select server-select" @bind="_searchMethod">
+                <select class="form-select method-select" @bind="_searchMethod">
                     <option value="callsign">By Callsign</option>
                     <option value="flightid">By Flight ID</option>
+                    <option value="userid">By User ID</option>
+                    <option value="username">By IFC Username</option>
                 </select>
             </div>
             <div class="query-box">
@@ -86,7 +88,6 @@
     
     void SearchFlight()
     {
-        
         if (_searchQuery.Trim() == "")
         {
             CurrentPage.ShowNotification("Query is empty.");
@@ -104,16 +105,27 @@
         StateHasChanged();
 
         List<FlightEntry> flights = new List<FlightEntry>();
-        
-        if (_selectedServer == "all")
+
+        try
         {
-            flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.CasualServerId));
-            flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.TrainingServerId));
-            flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.ExpertServerId));
+            if (_selectedServer == "all")
+            {
+                flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.CasualServerId));
+                flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.TrainingServerId));
+                flights.AddRange(await ApiHelper.GetFlightsForServer(ServerGuids.ExpertServerId));
+            }
+            else
+            {
+                flights.AddRange(await ApiHelper.GetFlightsForServer(server));
+            }
         }
-        else
+        catch
         {
-            flights.AddRange(await ApiHelper.GetFlightsForServer(server));
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            _showLoadingIndicator = false;
+            StateHasChanged();
+            
+            return;
         }
 
         _searchResults = new List<FlightEntry>();
@@ -125,6 +137,10 @@
                     return flight.Callsign != null && flight.Callsign.ToLower().Contains(_searchQuery.ToLower());
                 case "flightid":
                     return flight.FlightId.ToString().Equals(_searchQuery);
+                case "userid":
+                    return flight.UserId.ToString().Equals(_searchQuery);
+                case "username":
+                    return flight.Username != null && flight.Username.ToLower().Contains(_searchQuery.ToLower());
             }
 
             return false;

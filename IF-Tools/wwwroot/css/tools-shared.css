@@ -85,6 +85,42 @@ tr.clickable:hover {
     font-size: 17px;
 }
 
+.info-item {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px dashed lightgray;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.info-item:first-of-type {
+    padding-top: 0;
+}
+
+.info-item:last-of-type {
+    border-bottom: none;
+}
+
+.info-title {
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: gray;
+}
+
+.info-value {
+    font-size: 17px;
+    word-wrap: break-word;
+}
+
+.more-info-text {
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+    color: gray;
+}
+
 @media (max-width: 900px) {
     .wrapper {
         flex-direction: column;

@@ -13,7 +13,7 @@
     z-index: 99;
 }
 
-.flight-info-modal {
+.frequency-info-modal {
     width: 30%;
     height: 500px;
     min-width: 300px;
@@ -56,4 +56,13 @@
     width: 100%;
     padding: 15px;
     overflow-y: auto;
+}
+
+.more-info-text {
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+    color: gray;
 }

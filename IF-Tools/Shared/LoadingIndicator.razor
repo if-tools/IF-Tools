@@ -1,4 +1,4 @@
-<div class="loader@(!IsShown ? " hidden" : "") @(AddLeftMargin ? "left-margin" : "")" style="width: @DimensionsEm; height: @DimensionsEm"></div>
+<div class="loader@(!IsShown ? " hidden" : "") @(AddLeftMargin ? "left-margin" : "") @(IsInline ? "inline" : "")" style="width: @DimensionsEm; height: @DimensionsEm"></div>
 
 @code {
     [Parameter] 
@@ -6,6 +6,9 @@
 
     [Parameter]
     public bool AddLeftMargin { get; set; }
+    
+    [Parameter]
+    public bool IsInline { get; set; }
     
     [Parameter]
     public int DimensionsEm { get; set; } = 8;

@@ -27,17 +27,17 @@
                 </div>
                 <div class="info-item">
                     <span class="info-title">Aircraft</span>
-                    <span class="info-value">@(AircraftGuidsService.GetAircraftName(_currentFlightEntry.AircraftId))</span>
+                    <span class="info-value">@(AircraftGuidsService.GetAircraftName(_currentFlightEntry.AircraftId)) (@(AircraftGuidsService.GetLiveryName(_currentFlightEntry.AircraftId, _currentFlightEntry.LiveryId)))</span>
                 </div>
                 <div class="info-item">
-                    <span class="info-title">Livery</span>
-                    <span class="info-value">@(AircraftGuidsService.GetLiveryName(_currentFlightEntry.AircraftId, _currentFlightEntry.LiveryId))</span>
+                    <span class="info-title">Server</span>
+                    <span class="info-value">@ServerGuids.GetNameByGuid(_currentFlightEntry.ServerId)</span>
                 </div>
                 <div class="info-item">
                     <span class="info-title">State</span>
                     <span class="info-value">@FlightState.GetFlightState(_currentFlightEntry)</span>
                 </div>
-                <span class="more-info-text">For more information, see <a href="#">here</a>.</span>
+                <span class="more-info-text">For more information, see <a href="/tools/flights/@_currentFlightEntry.FlightId">here</a>.</span>
             </div>
         </div>
     </div>

@@ -8,30 +8,45 @@ namespace IFTools.Data
 {
     public class ApiHelper
     {
-        private static Dictionary<Guid, List<FlightEntry>> _cachedFlights = new();
-        private static Dictionary<Guid, DateTime> _flightsUpdated = new();
+        private static readonly Dictionary<Guid, List<FlightEntry>> CachedFlights = new();
+        private static readonly Dictionary<Guid, DateTime> FlightsUpdated = new();
         
         public static async Task<List<FlightEntry>> GetFlightsForServer(Guid serverId)
         {
-            if (!_cachedFlights.ContainsKey(serverId))
+            if (!CachedFlights.ContainsKey(serverId))
             {
-                _cachedFlights[serverId] = await InfiniteFlightApiService.GetFlightsAsync(serverId);
-                _flightsUpdated[serverId] = DateTime.Now;
+                CachedFlights[serverId] = await InfiniteFlightApiService.GetFlightsAsync(serverId);
+                FlightsUpdated[serverId] = DateTime.Now;
+                
+                CachedFlights[serverId].ForEach(flight => flight.ServerId = serverId);
             }
             
             // Refresh cached flights every 7 seconds
-            if ((DateTime.Now - _flightsUpdated[serverId]).TotalMilliseconds >= 7000)
+            if ((DateTime.Now - FlightsUpdated[serverId]).TotalMilliseconds >= 7000)
             {
-                _cachedFlights[serverId] = await InfiniteFlightApiService.GetFlightsAsync(serverId);
-                _flightsUpdated[serverId] = DateTime.Now;
+                CachedFlights[serverId] = await InfiniteFlightApiService.GetFlightsAsync(serverId);
+                FlightsUpdated[serverId] = DateTime.Now;
+                
+                CachedFlights[serverId].ForEach(flight => flight.ServerId = serverId);
             }
             
-            return _cachedFlights[serverId];
+            return CachedFlights[serverId];
+        }
+
+        public static async Task<FlightEntry> FindFlightFromAllServers(Guid flightId)
+        {
+            var flights = new List<FlightEntry>();
+            
+            flights.AddRange(await GetFlightsForServer(ServerGuids.CasualServerId));
+            flights.AddRange(await GetFlightsForServer(ServerGuids.TrainingServerId));
+            flights.AddRange(await GetFlightsForServer(ServerGuids.ExpertServerId));
+
+            return flights.FirstOrDefault(flight => flight.FlightId == flightId);
         }
         
         public static string BuildUrl(string baseUrl, string endpoint, string parameters)
         {
-            return string.Join("",baseUrl, endpoint, "?", parameters);
+            return string.Join("", baseUrl, endpoint, "?", parameters);
         }
     }
 }

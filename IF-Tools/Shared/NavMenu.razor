@@ -1,6 +1,6 @@
 ﻿<div class="top-row navbar navbar-dark">
     <a class="navbar-brand" href="">
-        <img class="logo-image" alt="logo" src="Assets/Images/Logos/logo-white.png">
+        <img class="logo-image" alt="logo" src="images/logos/logo-white.png">
     </a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -37,13 +37,8 @@
                     </NavLink>
                 </li>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="/tools/user-info" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link" href="/tools/user-info" Match="NavLinkMatch.Prefix">
                         <span class="feather icon-user" aria-hidden="true"></span> User Info
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="/tools/live-stats" Match="NavLinkMatch.All">
-                        <span class="feather icon-pie-chart" aria-hidden="true"></span> Live Stats
                     </NavLink>
                 </li>
             </ul>

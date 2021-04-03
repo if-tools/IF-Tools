@@ -1,0 +1,63 @@
+@using IFTools.Data.Types
+@using IFTools.Data
+
+@if (_isShown)
+{
+    <div class="wrapper">
+        <div class="frequency-info-modal">
+            <div class="modal-head">
+                <span class="modal-title">Frequency Info</span>
+                <span class="modal-close feather icon-x" tabindex="0" @onkeydown="Hide" @onclick="Hide"></span>
+            </div>
+            <div class="modal-body">
+                <div class="info-item">
+                    <span class="info-title">Type</span>
+                    <span class="info-value">@_currentAtcEntry.Type.ToString()</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">IFC Username</span>
+                    @if (_currentAtcEntry.Username == null || _currentAtcEntry.Username == "Controller")
+                    {
+                        <span class="info-value">N/A</span>
+                    }
+                    else
+                    {
+                        <a href="https://community.infiniteflight.com/u/@(_currentAtcEntry.Username.ToLower())" target="_blank" class="info-value">@(_currentAtcEntry.Username)</a>
+                    }
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Airport</span>
+                    <span class="info-value">@(string.IsNullOrEmpty(_currentAtcEntry.AirportName) ? "N/A" : _currentAtcEntry.AirportName)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Start Time</span>
+                    <span class="info-value">@_currentAtcEntry.StartTime.ToString("u")</span>
+                </div>
+                <span class="more-info-text">For more information on this user, see <a href="/tools/user-info/@_currentAtcEntry.UserId">here</a>.</span>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    bool _isShown;
+    AtcEntry _currentAtcEntry;
+    
+    public void Show(AtcEntry frequency)
+    {
+        _currentAtcEntry = frequency;
+        _isShown = true;
+        
+        StateHasChanged();
+    }
+
+    private void Hide()
+    {
+        _isShown = false;
+        _currentAtcEntry = null;
+        
+        StateHasChanged();
+    }
+    
+}

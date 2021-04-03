@@ -12,4 +12,13 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\csv\aircrafts_20.03.csv" />
+      <None Include="wwwroot\images\404Icon.png" />
+      <None Include="wwwroot\images\logos\logo-small-wshadow.png" />
+      <None Include="wwwroot\images\logos\logo-small.png" />
+      <None Include="wwwroot\images\logos\logo-white.png" />
+      <None Include="wwwroot\images\logos\logo.png" />
+    </ItemGroup>
+
 </Project>

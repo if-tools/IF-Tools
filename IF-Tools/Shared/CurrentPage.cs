@@ -27,6 +27,7 @@ namespace IFTools.Shared
             if (NotificationBoxShown)
             {
                 NotificationBoxText = text;
+                NotifyStateChanged();
                 return;
             }
             

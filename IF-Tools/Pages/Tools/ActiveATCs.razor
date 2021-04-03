@@ -1,19 +1,105 @@
 @page "/tools/active-atcs"
+@using IFTools.Data.Types
+@using IFTools.Data
 
 @inject CurrentPage CurrentPage
 
+<FrequencyInfoModal @ref="_frequencyInfoModal"></FrequencyInfoModal>
+
 <h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
 
-<p>Current count: 0</p>
-
-<button class="btn btn-primary">Click me</button>
+<div class="wrapper">
+    <div class="section-left">
+        <div class="data-input">
+            <div class="server-box">
+                <span class="input-name">Server</span>
+                <select class="server-select" @bind="_selectedServer">
+                    <option value="training">Training Server</option>
+                    <option value="expert">Expert Server</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" @onclick="ShowFrequencies">Show</button>
+        </div>
+    </div>
+    <div class="section-right">
+        <h4 class="section-title">Result <LoadingIndicator IsShown="_showLoadingIndicator" AddLeftMargin="true"></LoadingIndicator></h4>
+        <div class="result">
+            @if(_resultDisplayed)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Airport</th>
+                            <th>Aircraft</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var entry in _atcEntries)
+                    {
+                        <tr class="clickable" @onclick="() => _frequencyInfoModal.Show(entry)">
+                            <td>@(string.IsNullOrEmpty(entry.AirportName) ? "N/A" : entry.AirportName)</td>
+                            <td>@entry.Type.ToString()</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="nothing-displayed">There's nothing to show here.</p>
+            }
+            </div>
+    </div>
+</div>
 
 @code {
+    
+    string _selectedServer = "training";
+    
+    bool _resultDisplayed;
+    bool _showLoadingIndicator;
+    List<AtcEntry> _atcEntries;
+
+    FrequencyInfoModal _frequencyInfoModal;
     
     protected override void OnInitialized()
     {
         CurrentPage.SetCurrentPageName("Active ATCs");
         base.OnInitialized();
+    }
+    
+    void ShowFrequencies()
+    {
+        var serverGuid = ServerGuids.GetGuidByName(_selectedServer);
+
+        GetAndDisplayAtcsForServer(serverGuid);
+    }
+
+    async void GetAndDisplayAtcsForServer(Guid server)
+    {
+        _showLoadingIndicator = true;
+        StateHasChanged();
+
+        List<AtcEntry> atcs;
+
+        try
+        {
+            atcs = await InfiniteFlightApiService.GetAtcFacilitiesAsync(server);
+        }
+        catch
+        {
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            _showLoadingIndicator = false;
+            StateHasChanged();
+            
+            return;
+        }
+
+        _atcEntries = atcs;
+        _resultDisplayed = true;
+        _showLoadingIndicator = false;
+        
+        StateHasChanged();
     }
 
 }

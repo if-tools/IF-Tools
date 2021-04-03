@@ -13,6 +13,10 @@
     margin-left: 10px;
 }
 
+.loader.inline {
+    display: inline-block;
+}
+
 .loader {
     font-size: 3px;
     position: relative;

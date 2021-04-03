@@ -1,19 +1,174 @@
 @page "/tools/user-info"
+@page "/tools/user-info/{UserId}"
+@using IFTools.Data
+@using IFTools.Data.Types
 
 @inject CurrentPage CurrentPage
 
 <h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
 
-<p>Current count: 0</p>
-
-<button class="btn btn-primary">Click me</button>
+<div class="wrapper">
+    <div class="section-left">
+        <div class="data-input">
+            <div class="method-box">
+                <span class="input-name">Search Method</span>
+                <select class="form-select method-select" @bind="_searchMethod">
+                    <option value="ifc">By IFC Username</option>
+                    <option value="userid">By User ID</option>
+                </select>
+            </div>
+            <div class="query-box">
+                <span class="input-name">Search query</span>
+                <input class="query-input" @bind="_query" placeholder="Enter your search query">
+            </div>
+            <button class="btn btn-primary" @onclick="ShowInfo">Show</button>
+        </div>
+    </div>
+    <div class="section-right">
+        <h4 class="section-title">Result <LoadingIndicator IsShown="_showLoadingIndicator" AddLeftMargin="true"></LoadingIndicator></h4>
+        <div class="result">
+            @if(_resultDisplayed)
+            {
+                <div class="info-item">
+                    <span class="info-title">Discourse Username</span>
+                    @if (_userInfo.DiscourseUsername == null)
+                    {
+                        <span class="info-value">N/A</span>
+                    }
+                    else
+                    {
+                        <a href="https://community.infiniteflight.com/u/@(_userInfo.DiscourseUsername.ToLower())" target="_blank" class="info-value">@(_userInfo.DiscourseUsername)</a>
+                    }
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Grade</span>
+                    <span class="info-value">@_userInfo.Grade</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Flight Time</span>
+                    <span class="info-value">@Math.Round(_userInfo.FlightTime / 60) hrs</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Experience</span>
+                    <span class="info-value">@_userInfo.Xp XP</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Total Landings</span>
+                    <span class="info-value">@_userInfo.LandingCount</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Total Flights</span>
+                    <span class="info-value">@_userInfo.OnlineFlights</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">ATC Rank</span>
+                    <span class="info-value">@(_userInfo.AtcRank == null ? "N/A" : _userInfo.AtcRank.ToString())</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Violations</span>
+                    <span class="info-value">@_userInfo.Violations</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">UserId</span>
+                    <span class="info-value">@_userInfo.UserId</span>
+                </div>
+            }
+            else
+            {
+                <p class="nothing-displayed">There's nothing to show here.</p>
+            }
+            </div>
+    </div>
+</div>
 
 @code {
     
+    [Parameter]
+    public string UserId { get; set; }
+
+    string _searchMethod = "ifc";
+    string _query = "";
+    
+    bool _resultDisplayed;
+    bool _showLoadingIndicator;
+
+    UserStats _userInfo;
+
     protected override void OnInitialized()
     {
         CurrentPage.SetCurrentPageName("User Info");
+
+        if (!string.IsNullOrEmpty(UserId))
+        {
+            _searchMethod = "userid";
+            _query = UserId;
+            
+            ShowInfo();
+        }
+        
         base.OnInitialized();
+    }
+    
+    void ShowInfo()
+    {
+        if (_searchMethod == "userid" && !Guid.TryParse(_query, out _))
+        {
+            CurrentPage.ShowNotification("No such user found.");
+            return;
+        }
+        
+        if (_query.Trim() == "")
+        {
+            CurrentPage.ShowNotification("Query is empty.");
+            return;
+        }
+        
+        GetAndDisplayUserInfo();
+    }
+
+    async void GetAndDisplayUserInfo()
+    {
+        _showLoadingIndicator = true;
+        StateHasChanged();
+
+        List<UserStats> userInfo = null;
+
+        try
+        {
+            switch (_searchMethod)
+            {
+                case "ifc":
+                    userInfo = await InfiniteFlightApiService.GetUserStatsAsync(ifcNames: new[] {_query});
+                    break;
+                case "userid":
+                    userInfo = await InfiniteFlightApiService.GetUserStatsAsync(new[] {Guid.Parse(_query)});
+                    break;
+            }
+        }
+        catch
+        {
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            _showLoadingIndicator = false;
+            StateHasChanged();
+            
+            return;
+        }
+
+        if (userInfo == null || userInfo.Count <= 0)
+        {
+            CurrentPage.ShowNotification("No such user found.");
+            _showLoadingIndicator = false;
+            _resultDisplayed = false;
+            StateHasChanged();
+
+            return;
+        }
+        
+        _userInfo = userInfo.First();
+        _resultDisplayed = true;
+        _showLoadingIndicator = false;
+        
+        StateHasChanged();
     }
 
 }

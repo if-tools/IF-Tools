@@ -18,5 +18,14 @@ namespace IFTools.Data
                 _ => CasualServerId
             };
         }
+
+        public static string GetNameByGuid(Guid serverId)
+        {
+            if (serverId == CasualServerId) return "Casual Server";
+            if (serverId == TrainingServerId) return "Training Server";
+            if (serverId == ExpertServerId) return "Expert Server";
+            
+            return "N/A";
+        }
     }
 }
