@@ -1,0 +1,107 @@
+@page "/tools/live-flights"
+@using IFTools.Data
+@using IFTools.Data.Types
+
+@inject CurrentPage CurrentPage
+
+<FlightInfoModal @ref="_flightInfoModal"></FlightInfoModal>
+
+<h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
+
+<div class="wrapper">
+    <div class="section-left">
+        <div class="data-input">
+            <div class="server-box">
+                <span class="input-name">Server</span>
+                <select class="server-select" @bind="_selectedServer">
+                    <option value="casual">Casual Server</option>
+                    <option value="training">Training Server</option>
+                    <option value="expert">Expert Server</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" @onclick="ShowFlights">Show</button>
+        </div>
+    </div>
+    <div class="section-right">
+        <h4 class="section-title">Result <LoadingIndicator IsShown="_showLoadingIndicator" AddLeftMargin="true"></LoadingIndicator></h4>
+        <div class="result">
+            @if(_resultDisplayed)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Callsign</th>
+                            <th>Aircraft</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var entry in _flightEntries)
+                    {
+                        <tr class="clickable" @onclick="() => _flightInfoModal.Show(entry)">
+                            <td>@entry.Callsign</td>
+                            <td>@(AircraftGuidsService.GetAircraftName(entry.AircraftId))</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="nothing-displayed">There's nothing to show here.</p>
+            }
+            </div>
+    </div>
+</div>
+
+@code {
+
+    string _selectedServer = "casual";
+    
+    bool _resultDisplayed;
+    bool _showLoadingIndicator;
+    List<FlightEntry> _flightEntries;
+
+    FlightInfoModal _flightInfoModal;
+    
+    protected override void OnInitialized()
+    {
+        CurrentPage.SetCurrentPageName("Live Flights");
+    
+        base.OnInitialized();
+    }
+
+    void ShowFlights()
+    {
+        var serverGuid = ServerGuids.GetGuidByName(_selectedServer);
+
+        GetAndDisplayFlightsForServer(serverGuid);
+    }
+
+    async void GetAndDisplayFlightsForServer(Guid server)
+    {
+        _showLoadingIndicator = true;
+        StateHasChanged();
+
+        List<FlightEntry> flights;
+        
+        try
+        {
+            flights = await ApiHelper.GetFlightsForServer(server);
+        }
+        catch
+        {
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            _showLoadingIndicator = false;
+            StateHasChanged();
+            
+            return;
+        }
+
+        _flightEntries = flights;
+        _resultDisplayed = true;
+        _showLoadingIndicator = false;
+        
+        StateHasChanged();
+    }
+
+}

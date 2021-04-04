@@ -1,0 +1,67 @@
+@using IFTools.Data.Types
+@using IFTools.Data
+
+@if (_isShown)
+{
+    <div class="wrapper">
+        <div class="flight-info-modal">
+            <div class="modal-head">
+                <span class="modal-title">Flight Info</span>
+                <span class="modal-close feather icon-x" tabindex="0" @onkeydown="Hide" @onclick="Hide"></span>
+            </div>
+            <div class="modal-body">
+                <div class="info-item">
+                    <span class="info-title">Callsign</span>
+                    <span class="info-value">@_currentFlightEntry.Callsign</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">IFC Username</span>
+                    @if (_currentFlightEntry.Username == null)
+                    {
+                        <span class="info-value">N/A</span>
+                    }
+                    else
+                    {
+                        <a href="https://community.infiniteflight.com/u/@(_currentFlightEntry.Username.ToLower())" target="_blank" class="info-value">@(_currentFlightEntry.Username)</a>
+                    }
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Aircraft</span>
+                    <span class="info-value">@(AircraftGuidsService.GetAircraftName(_currentFlightEntry.AircraftId)) (@(AircraftGuidsService.GetLiveryName(_currentFlightEntry.AircraftId, _currentFlightEntry.LiveryId)))</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Server</span>
+                    <span class="info-value">@ServerGuids.GetNameByGuid(_currentFlightEntry.ServerId)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">State</span>
+                    <span class="info-value">@FlightState.GetFlightState(_currentFlightEntry)</span>
+                </div>
+                <span class="more-info-text">For more information, see <a href="/tools/flights/@_currentFlightEntry.FlightId">here</a>.</span>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    bool _isShown;
+    FlightEntry _currentFlightEntry;
+    
+    public void Show(FlightEntry flight)
+    {
+        _currentFlightEntry = flight;
+        _isShown = true;
+        
+        StateHasChanged();
+    }
+
+    private void Hide()
+    {
+        _isShown = false;
+        _currentFlightEntry = null;
+        
+        StateHasChanged();
+    }
+    
+}

@@ -1,0 +1,21 @@
+.subtitle {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.subtitle:not(:first-of-type) {
+    margin-top: 25px;
+}
+
+.subtitle .feather {
+    font-size: 20px;
+}
+
+.category[data-visible="False"] {
+    display: none;
+}
+
+.more-info-text {
+    margin: 20px 0;
+    text-align: left;
+}

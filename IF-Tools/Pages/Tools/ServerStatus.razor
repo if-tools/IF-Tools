@@ -1,0 +1,102 @@
+@page "/tools/server-status"
+@using IFTools.Data.Types
+@using IFTools.Data
+
+@inject CurrentPage CurrentPage
+
+<h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
+
+<div class="wrapper">
+    <div class="section-left">
+        <div class="data-input">
+            <div class="server-box">
+                <span class="input-name">Server</span>
+                <select class="server-select" @bind="_selectedServer">
+                    <option value="casual">Casual Server</option>
+                    <option value="training">Training Server</option>
+                    <option value="expert">Expert Server</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" @onclick="ShowStatus">Show</button>
+        </div>
+    </div>
+    <div class="section-right">
+        <h4 class="section-title">Result <LoadingIndicator IsShown="_showLoadingIndicator" AddLeftMargin="true"></LoadingIndicator></h4>
+        <div class="result">
+            @if (_resultDisplayed)
+            {
+                <div class="info-item">
+                    <span class="info-title">Name</span>
+                    <span class="info-value">@_serverInfo.Name</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">User Count</span>
+                    <span class="info-value">@_serverInfo.UserCount / @_serverInfo.MaxUsers</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Type</span>
+                    <span class="info-value">@_serverInfo.Type.ToString()</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-title">Session Id</span>
+                    <span class="info-value">@_serverInfo.Id.ToString()</span>
+                </div>
+            }
+            else
+            {
+                <p class="nothing-displayed">There's nothing to show here.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    
+    string _selectedServer = "casual";
+    
+    bool _resultDisplayed;
+    bool _showLoadingIndicator;
+
+    SessionInfo _serverInfo;
+    
+    protected override void OnInitialized()
+    {
+        CurrentPage.SetCurrentPageName("Server Status");
+        base.OnInitialized();
+    }
+
+    void ShowStatus()
+    {
+        var serverGuid = ServerGuids.GetGuidByName(_selectedServer);
+
+        GetAndDisplayServerInfo(serverGuid);
+    }
+
+    async void GetAndDisplayServerInfo(Guid server)
+    {
+        _showLoadingIndicator = true;
+        StateHasChanged();
+
+        List<SessionInfo> serverInfoList;
+
+        try
+        {
+            serverInfoList = await InfiniteFlightApiService.GetSessionsAsync();
+        }
+        catch
+        {
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            _showLoadingIndicator = false;
+            StateHasChanged();
+            
+            return;
+        }
+
+        _serverInfo = serverInfoList.FirstOrDefault(session => session.Id == server);
+        _resultDisplayed = true;
+        _showLoadingIndicator = false;
+        
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,132 @@
+html, body {
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+a, .btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.content {
+    padding-top: 20px;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.reconnect-modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .05);
+    z-index: 99;
+}
+
+.reconnect-modal-dialog {
+    width: 350px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.1);
+}
+
+.reconnect-modal-dialog .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.reconnect-modal-dialog .state {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.reconnect-modal-dialog .state p {
+    font-size: 20px;
+}
+
+.components-reconnect-hide {
+    display: none !important;
+}
+
+.components-reconnect-show .state {
+    display: none;
+}
+
+.components-reconnect-show .show {
+    display: flex;
+}
+
+.components-reconnect-failed .state {
+    display: none;
+}
+
+.components-reconnect-failed .failed {
+    display: flex;
+}
+
+.components-reconnect-rejected .state {
+    display: none;
+}
+
+.components-reconnect-rejected .rejected {
+    display: flex;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+@media (max-width: 640.98px) {
+    .content {
+        padding-top: 30px;
+    }
+}

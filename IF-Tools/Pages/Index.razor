@@ -1,0 +1,20 @@
+﻿@page "/"
+
+@inject CurrentPage CurrentPage
+
+<h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
+
+<p class="welcome-text">
+    Welcome to IF-Tools! <br/>
+    Refer to the navigation menu for Infinite Flight Live tools.
+</p>
+
+@code {
+    
+    protected override void OnInitialized()
+    {
+        CurrentPage.SetCurrentPageName("Main");
+        base.OnInitialized();
+    }
+
+}

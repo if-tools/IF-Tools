@@ -1,0 +1,162 @@
+@page "/tools/flights/{FlightId}"
+@page "/tools/flights"
+
+@using IFTools.Data.Types
+@using IFTools.Data
+@using dotless.Core.Utils
+
+@inject CurrentPage CurrentPage
+@inject NavigationManager NavManager
+
+<h2 class="mobile-page-title">@CurrentPage.CurrentPageName</h2>
+
+@if (!_flightNotFound && _flightEntry == null)
+{
+    <p>Loading..</p>
+}
+else if (_flightNotFound && _flightEntry == null)
+{
+    <p>That flight does not exist.</p>
+}
+else if(_flightEntry != null && _readyToShowData)
+{
+    <h5 class="subtitle" @onclick="() => ChangeCategoryState(0)">General Info <span class="feather icon-chevron-@(GetCategoryState(0) ? "down" : "right")"></span></h5>
+    <div class="category" data-visible="@GetCategoryState(0).ToString()">
+        <div class="info-item">
+            <span class="info-title">Callsign</span>
+            <span class="info-value">@_flightEntry.Callsign</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">IFC Username</span>
+            @if (_flightEntry.Username == null)
+            {
+                <span class="info-value">N/A</span>
+            }
+            else
+            {
+                <a href="https://community.infiniteflight.com/u/@(_flightEntry.Username.ToLower())" target="_blank" class="info-value">@(_flightEntry.Username)</a>
+            }
+        </div>
+        <div class="info-item">
+            <span class="info-title">Aircraft</span>
+            <span class="info-value">@(AircraftGuidsService.GetAircraftName(_flightEntry.AircraftId)) (@(AircraftGuidsService.GetLiveryName(_flightEntry.AircraftId, _flightEntry.LiveryId)))</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">Altitude</span>
+            <span class="info-value">@Math.Round(_flightEntry.Altitude) ft</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">Virtual Organisation</span>
+            <span class="info-value">@(string.IsNullOrEmpty(_flightEntry.VirtualOrganization) ? "N/A (None)" : _flightEntry.VirtualOrganization)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">Server</span>
+            <span class="info-value">@ServerGuids.GetNameByGuid(_flightEntry.ServerId)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">State</span>
+            <span class="info-value">@FlightState.GetFlightState(_flightEntry)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">Flight ID</span>
+            <span class="info-value">@_flightEntry.FlightId.ToString()</span>
+        </div>
+    </div>
+    <h5 class="subtitle" @onclick="() => ChangeCategoryState(1)">Flight Plan Info <span class="feather icon-chevron-@(GetCategoryState(1) ? "down" : "right")"></span></h5>
+    <div class="category" data-visible="@GetCategoryState(1).ToString()">
+        <div class="info-item">
+            <span class="info-title">Waypoints</span>
+            <span class="info-value">@_flightPlan.Waypoints.JoinStrings(" ")</span>
+        </div>
+        <div class="info-item">
+            <span class="info-title">Last Update</span>
+            <span class="info-value">@_flightPlan.LastUpdate.ToString("u")</span>
+        </div>
+    </div>
+    <h5 class="subtitle" @onclick="() => ChangeCategoryState(2)">User Info <span class="feather icon-chevron-@(GetCategoryState(2) ? "down" : "right")"></span></h5>
+    <div class="category" data-visible="@GetCategoryState(2).ToString()">
+        <span class="more-info-text">For more information on the user, see <a href="/tools/user-info/@_flightEntry.UserId">here</a>.</span>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string FlightId { get; set; }
+
+    FlightEntry _flightEntry;
+    FlightPlanEntry _flightPlan;
+
+    Dictionary<int, bool> _categoryStates = new ();
+    
+    bool _flightNotFound;
+    bool _readyToShowData;
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(FlightId))
+        {
+            NavManager.NavigateTo("/");
+            
+            return;
+        }
+        
+        CurrentPage.SetCurrentPageName("Flight Info");
+
+        Task.Run(FetchData);
+
+        base.OnInitialized();
+    }
+
+    async void FetchData()
+    {
+        try
+        {
+            if (Guid.TryParse(FlightId, out var flightGuid))
+                _flightEntry = await ApiHelper.FindFlightFromAllServers(flightGuid);
+        }
+        catch
+        {
+            CurrentPage.ShowNotification("Cannot retrieve data.");
+            StateHasChanged();
+            
+            return;
+        }
+
+        if (_flightEntry == null)
+        {
+            _flightNotFound = true;
+            return;
+        }
+
+        _flightPlan = await _flightEntry.GetFlightPlan(_flightEntry.ServerId);
+
+        _readyToShowData = true;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    bool GetCategoryState(int categoryId)
+    {
+        if (!_categoryStates.ContainsKey(categoryId))
+        {
+            _categoryStates.Add(categoryId, true);
+        }
+
+        return _categoryStates[categoryId];
+    }
+
+    void ChangeCategoryState(int categoryId)
+    {
+        if (!_categoryStates.ContainsKey(categoryId))
+        {
+            _categoryStates.Add(categoryId, false);
+        }
+        else
+        {
+            _categoryStates[categoryId] = !_categoryStates[categoryId];
+        }
+        
+        StateHasChanged();
+    }
+    
+}

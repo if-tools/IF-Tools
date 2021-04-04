@@ -1,0 +1,65 @@
+﻿@page "/"
+@namespace IFTools.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>IF-Tools</title>
+    <base href="~/"/>
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"/>
+    <link href="css/site.css" rel="stylesheet"/>
+    <link href="css/tools-shared.css" rel="stylesheet"/>
+    <link href="IF-Tools.styles.css" rel="stylesheet"/>
+    
+    <link href="https://fonts.cdnfonts.com/css/roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_o5hd5vvqpoqiwwmi.css">
+</head>
+<body>
+
+<div id="components-reconnect-modal" class="reconnect-modal components-reconnect-hide">
+    <div class="reconnect-modal-dialog">
+        <div class="modal-body">
+            <div class="state show">
+                <p>
+                    Reconnecting to server...
+                </p>
+                <button class="btn btn-primary" onclick="location.reload()">Reload page</button>
+            </div>
+            <div class="state failed">
+                <p>
+                    Lost connection to server.
+                </p>
+                <button class="btn btn-primary" onclick="location.reload()">Reload</button>
+            </div>
+            <div class="state rejected">
+                <p>
+                    Connection rejected.
+                </p>
+                <button class="btn btn-primary" onclick="location.reload()">Reload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<component type="typeof(App)" render-mode="ServerPrerendered"/>
+
+<div id="blazor-error-ui">
+    <environment include="Staging,Production">
+        An error has occurred. This application may no longer respond until reloaded.
+    </environment>
+    <environment include="Development">
+        An unhandled exception has occurred. See browser dev tools for details.
+    </environment>
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+<script src="_framework/blazor.server.js"></script>
+</body>
+</html>

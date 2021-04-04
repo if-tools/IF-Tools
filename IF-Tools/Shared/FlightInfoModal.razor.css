@@ -1,0 +1,59 @@
+.wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .05);
+    z-index: 99;
+}
+
+.flight-info-modal {
+    width: 30%;
+    height: 500px;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.1);
+}
+
+.modal-head {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 50px;
+    padding: 0 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+.modal-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+}
+
+.modal-close {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-close:hover, .modal-close:focus {
+    color: gray;
+}
+
+.modal-body {
+    height: 100%;
+    width: 100%;
+    padding: 15px;
+    overflow-y: auto;
+}
