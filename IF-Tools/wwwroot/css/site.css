@@ -19,9 +19,79 @@ a, .btn-link {
     overflow-y: auto;
 }
 
-/* Hide reconnection messages */
-.components-reconnect-show, .components-reconnect-failed, .components-reconnect-rejected {
+.reconnect-modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .05);
+    z-index: 99;
+}
+
+.reconnect-modal-dialog {
+    width: 350px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,.1);
+}
+
+.reconnect-modal-dialog .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.reconnect-modal-dialog .state {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.reconnect-modal-dialog .state p {
+    font-size: 20px;
+}
+
+.components-reconnect-hide {
+    display: none !important;
+}
+
+.components-reconnect-show .state {
     display: none;
+}
+
+.components-reconnect-show .show {
+    display: flex;
+}
+
+.components-reconnect-failed .state {
+    display: none;
+}
+
+.components-reconnect-failed .failed {
+    display: flex;
+}
+
+.components-reconnect-rejected .state {
+    display: none;
+}
+
+.components-reconnect-rejected .rejected {
+    display: flex;
 }
 
 .valid.modified:not([type=checkbox]) {

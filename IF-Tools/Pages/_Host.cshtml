@@ -21,7 +21,31 @@
     <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_o5hd5vvqpoqiwwmi.css">
 </head>
 <body>
-<div id="components-reconnect-modal"></div>
+
+<div id="components-reconnect-modal" class="reconnect-modal components-reconnect-hide">
+    <div class="reconnect-modal-dialog">
+        <div class="modal-body">
+            <div class="state show">
+                <p>
+                    Reconnecting to server...
+                </p>
+                <button class="btn btn-primary" onclick="location.reload()">Reload page</button>
+            </div>
+            <div class="state failed">
+                <p>
+                    Lost connection to server.
+                </p>
+                <button class="btn btn-primary" onclick="location.reload()">Reload</button>
+            </div>
+            <div class="state rejected">
+                <p>
+                    Connection rejected.
+                </p>
+                <button class="btn btn-primary" onclick="location.reload()">Reload</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <component type="typeof(App)" render-mode="ServerPrerendered"/>
 
