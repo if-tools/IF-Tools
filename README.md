@@ -7,7 +7,7 @@ These are the current available IF Live tools:
  - **Live Flights** - View current flights on any given server.
  - **Active ATCs** - View currently active frequencies on any given server (except Casual).
  - **Server Status** - View current player count on any given server.
- - **User Info** - Find users by their IFC username / User Ids and view their stats.
+ - **User Info** - Find users by their IFC username / User Id and view their stats.
 
 ## Building
 IF-Tools is built with ASP.NET Core. To build and run a local copy of this website,
