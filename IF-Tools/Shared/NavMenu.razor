@@ -2,12 +2,12 @@
     <a class="navbar-brand" href="">
         <img class="logo-image" alt="logo" src="images/logos/logo-white.png">
     </a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+    <button class="navbar-toggler" onclick="toggleNavMenu()">
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
 
-<div class="nav-menu @NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="nav-menu collapse" onclick="toggleNavMenu()">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -51,13 +51,5 @@
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
+    
 }
