@@ -3,7 +3,6 @@
 
 @using IFTools.Data.Types
 @using IFTools.Data
-@using dotless.Core.Utils
 
 @inject CurrentPage CurrentPage
 @inject NavigationManager NavManager
@@ -66,7 +65,7 @@ else if(_flightEntry != null && _readyToShowData)
     <div class="category" data-visible="@GetCategoryState(1).ToString()">
         <div class="info-item">
             <span class="info-title">Waypoints</span>
-            <span class="info-value">@_flightPlan.Waypoints.JoinStrings(" ")</span>
+            <span class="info-value">@string.Join(' ', _flightPlan.Waypoints)</span>
         </div>
         <div class="info-item">
             <span class="info-title">Last Update</span>
@@ -117,7 +116,6 @@ else if(_flightEntry != null && _readyToShowData)
         catch
         {
             CurrentPage.ShowNotification("Cannot retrieve data.");
-            StateHasChanged();
             
             return;
         }
@@ -125,6 +123,8 @@ else if(_flightEntry != null && _readyToShowData)
         if (_flightEntry == null)
         {
             _flightNotFound = true;
+            InvokeAsync(StateHasChanged);
+            
             return;
         }
 
