@@ -44,6 +44,26 @@ namespace IFTools.Data
             return flights.FirstOrDefault(flight => flight.FlightId == flightId);
         }
         
+        public static async Task<string> GetFplFromFlight(string callSign)
+        {
+            var flights = new List<FlightEntry>();
+            
+            flights.AddRange(await GetFlightsForServer(ServerGuids.CasualServerId));
+            flights.AddRange(await GetFlightsForServer(ServerGuids.TrainingServerId));
+            flights.AddRange(await GetFlightsForServer(ServerGuids.ExpertServerId));
+
+            if (!flights.Exists(flightEntry =>
+                String.Equals(flightEntry.Callsign, callSign, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return "notfound";
+            }
+            
+            var flight = flights.First(flightEntry =>
+                String.Equals(flightEntry.Callsign, callSign, StringComparison.CurrentCultureIgnoreCase));
+            
+            return string.Join(' ', (await flight.GetFlightPlan(flight.ServerId)).Waypoints);
+        }
+        
         public static string BuildUrl(string baseUrl, string endpoint, string parameters)
         {
             return string.Join("", baseUrl, endpoint, "?", parameters);
