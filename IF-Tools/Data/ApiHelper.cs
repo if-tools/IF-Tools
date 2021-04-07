@@ -60,8 +60,10 @@ namespace IFTools.Data
             
             var flight = flights.First(flightEntry =>
                 String.Equals(flightEntry.Callsign, callSign, StringComparison.CurrentCultureIgnoreCase));
-            
-            return string.Join(' ', (await flight.GetFlightPlan(flight.ServerId)).Waypoints);
+
+            var flightPlan = await flight.GetFlightPlan(flight.ServerId);
+
+            return flightPlan?.Waypoints == null ? "" : string.Join(' ', flightPlan.Waypoints);
         }
         
         public static string BuildUrl(string baseUrl, string endpoint, string parameters)
