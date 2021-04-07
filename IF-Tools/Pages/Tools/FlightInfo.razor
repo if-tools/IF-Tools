@@ -116,7 +116,6 @@ else if(_flightEntry != null && _readyToShowData)
         catch
         {
             CurrentPage.ShowNotification("Cannot retrieve data.");
-            StateHasChanged();
             
             return;
         }
@@ -124,6 +123,8 @@ else if(_flightEntry != null && _readyToShowData)
         if (_flightEntry == null)
         {
             _flightNotFound = true;
+            InvokeAsync(StateHasChanged);
+            
             return;
         }
 
