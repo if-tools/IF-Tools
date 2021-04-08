@@ -9,7 +9,7 @@ using Group = IFTools.Data.Types.Group;
 
 namespace IFTools.Data
 {
-    public class InfiniteFlightApiService
+    public static class InfiniteFlightApiService
     {
         private static HttpClient _http;
         private static string _apiKey;

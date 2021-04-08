@@ -6,7 +6,7 @@ using IFTools.Data.Types;
 
 namespace IFTools.Data
 {
-    public class ApiHelper
+    public static class ApiHelper
     {
         private static readonly Dictionary<Guid, List<FlightEntry>> CachedFlights = new();
         private static readonly Dictionary<Guid, DateTime> FlightsUpdated = new();

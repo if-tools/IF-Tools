@@ -27,7 +27,6 @@ namespace IFTools
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<InfiniteFlightApiService>();
             services.AddSingleton<AircraftGuidsService>();
 
             services.AddScoped<CurrentPage>();
