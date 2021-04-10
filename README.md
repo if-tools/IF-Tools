@@ -20,4 +20,4 @@ You must have .NET 5.0 installed. You must also have the following environment v
  - `IF_LIVE_KEY` - Your IF Live Api key. See [here](https://infiniteflight.com/guide/developer-reference/live-api/overview#obtaining-an-api-key) for information on obtaining it.
 
 ## Contributing
-Want to contribute? That's great, thanks! Clone the `develop` branch of this repo to get started, and then open a new Pull Request when you've made your desired changes (don't forget to describe them).
+Want to contribute? That's great, thanks! Fork the `develop` branch of this repo to get started, and then open a new Pull Request when you've made your desired changes (don't forget to describe them).
