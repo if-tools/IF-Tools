@@ -10,11 +10,14 @@ These are the current available IF Live tools:
  - **User Info** - Find users by their IFC username / User Id and view their stats.
 
 ## Building
-IF-Tools is built with ASP.NET Core. To build and run a local copy of this website,
-clone this repository, go to the project folder (`IF-Tools`) and run `dotnet run`. You must have
-.NET 5.0 installed.
+IF-Tools is built with ASP.NET Core. Follow these steps to build and run a local copy of this website:
+
+ 1. Clone this repository using `git clone`.
+ 2. Go to the project folder (`IF-Tools`).
+ 3. Run `dotnet run`. This will build and run the app.
+
+You must have .NET 5.0 installed. You must also have the following environment variable set in your environment:
+ - `IF_LIVE_KEY` - Your IF Live Api key. See [here](https://infiniteflight.com/guide/developer-reference/live-api/overview#obtaining-an-api-key) for information on obtaining it.
 
 ## Contributing
-Want to contribute? That's great, thanks! Clone the `develop` branch of this repo to get started,
-and then open a new Pull Request when you've made your desired
-changes (don't forget to describe them).
+Want to contribute? That's great, thanks! Fork the `develop` branch of this repo to get started, and then open a new Pull Request when you've made your desired changes (don't forget to describe them).

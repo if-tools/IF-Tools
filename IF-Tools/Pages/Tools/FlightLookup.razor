@@ -31,9 +31,9 @@
             </div>
             <div class="query-box">
                 <span class="input-name">Search query</span>
-                <input class="query-input" @bind="_searchQuery" placeholder="Enter your search query">
+                <input class="query-input" @bind="_searchQuery" placeholder="Enter your search query.">
             </div>
-            <button class="btn btn-primary" @onclick="SearchFlight">Search</button>
+            <button class="btn btn-primary" @onclick="SearchFlights">Search</button>
         </div>
     </div>
     <div class="section-right">
@@ -86,7 +86,7 @@
         base.OnInitialized();
     }
     
-    void SearchFlight()
+    void SearchFlights()
     {
         if (_searchQuery.Trim() == "")
         {

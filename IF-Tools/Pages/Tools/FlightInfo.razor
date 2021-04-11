@@ -65,11 +65,11 @@ else if(_flightEntry != null && _readyToShowData)
     <div class="category" data-visible="@GetCategoryState(1).ToString()">
         <div class="info-item">
             <span class="info-title">Waypoints</span>
-            <span class="info-value">@string.Join(' ', _flightPlan.Waypoints)</span>
+            <span class="info-value">@(_flightPlan?.Waypoints == null ? "N/A" : string.Join(' ', _flightPlan.Waypoints))</span>
         </div>
         <div class="info-item">
             <span class="info-title">Last Update</span>
-            <span class="info-value">@_flightPlan.LastUpdate.ToString("u")</span>
+            <span class="info-value">@(_flightPlan?.LastUpdate.ToString("u") ?? "N/A")</span>
         </div>
     </div>
     <h5 class="subtitle" @onclick="() => ChangeCategoryState(2)">User Info <span class="feather icon-chevron-@(GetCategoryState(2) ? "down" : "right")"></span></h5>

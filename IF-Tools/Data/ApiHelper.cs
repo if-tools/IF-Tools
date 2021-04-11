@@ -6,7 +6,7 @@ using IFTools.Data.Types;
 
 namespace IFTools.Data
 {
-    public class ApiHelper
+    public static class ApiHelper
     {
         private static readonly Dictionary<Guid, List<FlightEntry>> CachedFlights = new();
         private static readonly Dictionary<Guid, DateTime> FlightsUpdated = new();
@@ -60,8 +60,10 @@ namespace IFTools.Data
             
             var flight = flights.First(flightEntry =>
                 String.Equals(flightEntry.Callsign, callSign, StringComparison.CurrentCultureIgnoreCase));
-            
-            return string.Join(' ', (await flight.GetFlightPlan(flight.ServerId)).Waypoints);
+
+            var flightPlan = await flight.GetFlightPlan(flight.ServerId);
+
+            return flightPlan?.Waypoints == null ? "" : string.Join(' ', flightPlan.Waypoints);
         }
         
         public static string BuildUrl(string baseUrl, string endpoint, string parameters)
