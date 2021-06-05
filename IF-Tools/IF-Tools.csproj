@@ -6,22 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="CsvHelper" Version="26.1.0" />
+      <PackageReference Include="CsvHelper" Version="27.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Components.Web.Extensions" Version="5.0.0-preview9.20513.1" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="wwwroot\csv\aircrafts_20.03.csv" />
-      <None Include="wwwroot\images\404Icon.png" />
-      <None Include="wwwroot\images\logos\logo-small-wshadow.png" />
-      <None Include="wwwroot\images\logos\logo-small.png" />
-      <None Include="wwwroot\images\logos\logo-white.png" />
-      <None Include="wwwroot\images\logos\logo.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\js\navMenu.js" />
     </ItemGroup>
 
 </Project>

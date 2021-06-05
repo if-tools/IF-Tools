@@ -58,6 +58,22 @@
     margin-top: 15px;
 }
 
+input, select {
+    border-radius: 5px;
+    border: 1px solid #adadad;
+    padding: 0 5px;
+}
+
+select {
+    background-color: #f4f3f3;
+}
+
+textarea {
+    border: 1px solid #adadad;
+    border-radius: 3px;
+    padding: 5px;
+}
+
 .input-name {
     display: block;
     color: gray;
