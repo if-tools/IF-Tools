@@ -23,10 +23,12 @@
             <div class="method-box">
                 <span class="input-name">Search method</span>
                 <select class="form-select method-select" @bind="_searchMethod">
-                    <option value="callsign">By Callsign</option>
-                    <option value="flightid">By Flight ID</option>
-                    <option value="userid">By User ID</option>
-                    <option value="username">By IFC Username</option>
+                    <option value="@(SearchMethod.ByCallSign)">By Callsign</option>
+                    <option value="@(SearchMethod.ByFlightId)">By Flight ID</option>
+                    <option value="@(SearchMethod.ByUserId)">By User ID</option>
+                    <option value="@(SearchMethod.ByUserName)">By IFC Username</option>
+                    <option value="@(SearchMethod.ByAircraft)">By Aircraft Type</option>
+                    <option value="@(SearchMethod.ByLivery)">By Livery</option>
                 </select>
             </div>
             <div class="query-box">
@@ -70,7 +72,7 @@
 @code {
     
     string _selectedServer = "all";
-    string _searchMethod = "callsign";
+    SearchMethod _searchMethod = 0;
     string _searchQuery = "";
     
     bool _resultDisplayed;
@@ -133,14 +135,19 @@
         {
             switch (_searchMethod)
             {
-                case "callsign":
+                case SearchMethod.ByCallSign:
                     return flight.Callsign != null && flight.Callsign.ToLower().Contains(_searchQuery.ToLower());
-                case "flightid":
+                case SearchMethod.ByFlightId:
                     return flight.FlightId.ToString().Equals(_searchQuery);
-                case "userid":
+                case SearchMethod.ByUserId:
                     return flight.UserId.ToString().Equals(_searchQuery);
-                case "username":
+                case SearchMethod.ByUserName:
                     return flight.Username != null && flight.Username.ToLower().Contains(_searchQuery.ToLower());
+                case SearchMethod.ByAircraft:
+                    return AircraftGuidsService.GetAircraftName(flight.AircraftId).Contains(_searchQuery);
+                case SearchMethod.ByLivery:
+                    return AircraftGuidsService.GetLiveryName(flight.AircraftId, flight.LiveryId).Contains(_searchQuery);
+
             }
 
             return false;
@@ -160,6 +167,16 @@
         _showLoadingIndicator = false;
             
         StateHasChanged();
+    }
+
+    enum SearchMethod
+    {
+        ByCallSign,
+        ByFlightId,
+        ByUserId,
+        ByUserName,
+        ByAircraft,
+        ByLivery
     }
 
 }
