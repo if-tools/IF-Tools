@@ -15,7 +15,7 @@ namespace IFTools.Data
         {
             _aircrafts = new List<GuidAircraftEntry>();
             
-            using (TextReader reader = File.OpenText(@"wwwroot/csv/aircrafts_20.03.csv"))
+            using (TextReader reader = File.OpenText(@"wwwroot/csv/aircrafts.csv"))
             {
                 CsvReader csv = new CsvReader(reader, CultureInfo.CurrentCulture);
                 while (csv.Read())
