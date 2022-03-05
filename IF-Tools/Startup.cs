@@ -22,9 +22,6 @@ namespace IFTools
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<AircraftGuidsService>();
@@ -50,8 +47,6 @@ namespace IFTools
 
             app.UseRouting();
             
-            app.UseMvcWithDefaultRoute();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

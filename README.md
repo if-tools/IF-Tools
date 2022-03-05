@@ -16,7 +16,7 @@ IF-Tools is built with ASP.NET Core. Follow these steps to build and run a local
  2. Go to the project folder (`IF-Tools`).
  3. Run `dotnet run`. This will build and run the app.
 
-You must have .NET 5.0 installed. You must also have the following environment variable set in your environment:
+You must have .NET 6.0 installed. You must also have the following environment variable set in your environment:
  - `IF_LIVE_KEY` - Your IF Live Api key. See [here](https://infiniteflight.com/guide/developer-reference/live-api/overview#obtaining-an-api-key) for information on obtaining it.
 
 ## Contributing
