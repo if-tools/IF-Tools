@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using IFTools.Data.Types;
 using Newtonsoft.Json;
 using Group = IFTools.Data.Types.Group;
 
 namespace IFTools.Data
 {
-    public static class InfiniteFlightApiService
+    public class InfiniteFlightApiService
     {
         private static HttpClient _http;
         private static string _apiKey;
@@ -18,7 +14,7 @@ namespace IFTools.Data
 
         public static void Init()
         {
-            _apiKey = Environment.GetEnvironmentVariable("IF_LIVE_KEY");
+            _apiKey = Environment.GetEnvironmentVariable("INFINITE_FLIGHT_LIVE_KEY");
             _http = new HttpClient();
 
             Task.Run(AssignServerGuids);
@@ -124,7 +120,7 @@ namespace IFTools.Data
             {
                 throw new ArgumentNullException();
             }
-
+            
             var contentObj = new UserStatsRequest();
             if (userIds != null) contentObj.UserIds = userIds;
             if (hashes != null) contentObj.Hashes = hashes;

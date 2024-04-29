@@ -6,6 +6,10 @@
     height: calc(100% - 56px);
 }
 
+.nav {
+    width: 100%;
+}
+
 .nav-menu.collapse {
     display: none;
 }

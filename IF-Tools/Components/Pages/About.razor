@@ -10,7 +10,7 @@
     <span class="about-title about-element">IF-Tools</span>
     <span class="about-version about-element">@Version</span>
     <span class="about-description about-element">A website with tools for Infinite Flight Live.</span>
-    <span class="about-copyright about-element">Copyright &copy; 2021 Gleb Zhynko</span>
+    <span class="about-copyright about-element">Copyright &copy; 2024 Gleb Zhynko</span>
     <span class="about-licensed about-element">Licensed under <a href="https://github.com/if-tools/IF-Tools/blob/master/LICENSE" target="_blank">MIT</a></span>
 </div>
 
@@ -28,7 +28,7 @@
 
     private string GetVersion()
     {
-        var versionFile = File.ReadAllText("appVersion.json");
+        var versionFile = File.ReadAllText("version.json");
         var deserializedVersionFile = JsonConvert.DeserializeObject<VersionFile>(versionFile);
 
         return deserializedVersionFile == null ? "N/A" : deserializedVersionFile.Version;

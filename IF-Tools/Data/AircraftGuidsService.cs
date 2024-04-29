@@ -19,15 +19,15 @@ namespace IFTools.Data
             var aircraftString =
                 http.GetStringAsync(
                     "https://raw.githubusercontent.com/if-tools/IF-Tools/develop/IF-Tools/aircraft.csv").Result;
-            using (TextReader reader = new StringReader(aircraftString))
+
+            using TextReader reader = new StringReader(aircraftString);
+            
+            CsvReader csv = new CsvReader(reader, CultureInfo.CurrentCulture);
+            while (csv.Read())
             {
-                CsvReader csv = new CsvReader(reader, CultureInfo.CurrentCulture);
-                while (csv.Read())
-                {
-                    GuidAircraftEntry record = csv.GetRecord<GuidAircraftEntry>();
-                    _aircraft.Add(record);
-                }
-            } 
+                GuidAircraftEntry record = csv.GetRecord<GuidAircraftEntry>();
+                _aircraft.Add(record);
+            }
         }
 
         public static string GetAircraftName(Guid aircraftId)
