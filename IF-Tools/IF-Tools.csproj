@@ -29,7 +29,6 @@
     <ItemGroup>
       <AdditionalFiles Include="Components\Pages\About.razor" />
       <AdditionalFiles Include="Components\Pages\Error.cshtml" />
-      <AdditionalFiles Include="Components\Pages\Index.razor" />
       <AdditionalFiles Include="Components\Pages\Tools\ActiveATCs.razor" />
       <AdditionalFiles Include="Components\Pages\Tools\FlightInfo.razor" />
       <AdditionalFiles Include="Components\Pages\Tools\FlightLookup.razor" />
