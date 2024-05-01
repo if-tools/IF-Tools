@@ -7,6 +7,7 @@ DotEnv.Load(new DotEnvOptions(true, new [] {"../.env"}));
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
