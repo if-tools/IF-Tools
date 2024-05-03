@@ -144,9 +144,9 @@
                 case SearchMethod.ByUserName:
                     return flight.Username != null && flight.Username.ToLower().Contains(_searchQuery.ToLower());
                 case SearchMethod.ByAircraft:
-                    return AircraftGuidsService.GetAircraftName(flight.AircraftId).Contains(_searchQuery);
+                    return AircraftGuidsService.GetAircraftName(flight.AircraftId).ToLower().Contains(_searchQuery.ToLower());
                 case SearchMethod.ByLivery:
-                    return AircraftGuidsService.GetLiveryName(flight.AircraftId, flight.LiveryId).Contains(_searchQuery);
+                    return AircraftGuidsService.GetLiveryName(flight.AircraftId, flight.LiveryId).ToLower().Contains(_searchQuery.ToLower());
 
             }
 
