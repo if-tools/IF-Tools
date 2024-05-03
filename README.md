@@ -30,7 +30,7 @@ IF-Tools is built with ASP.NET Core 8.0 and Blazor. Follow these steps to build 
 - .NET 8.0
 
 #### Instructions:
-1. Build and run the app using
+1. Go into `IF-Tools` and build and run the app using
    ```bash
    $ dotnet run
    ```
